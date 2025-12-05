@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Seni seviyorum Ecrin’im 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+.card {
+  position:relative;
+  z-index:2;
+  background: rgba(255,255,255,0.95);
+  padding:40px;
+  border-radius:22px;
+  text-align:center;
+  max-width:450px;
+  width:90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+
+h1 {
+  color:#ff2f6d;
+  margin-bottom:10px;
+  font-size:32px;
+}
+
+p {
+  color:#555;
+  font-size:17px;
+}
+
+button {
+  margin-top:14px;
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:#ff2f6d;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+}
+
+footer {
+  margin-top:14px;
+  font-size:13px;
+  color:#777;
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="card">
+  <h1>Seni seviyorum Ecrin’im 💖</h1>
+  <p>Bu sayfa seni ne kadar çok sevdiğimin küçük bir göstergesi…</p>
+  <button id="copyBtn">Linki Kopyala</button>
+  <footer>Alex31-cyber.github.io/seniseviyorum-ecrinim</footer>
+</div>
+
+<script>
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let hearts = [];
+
+function Heart(){
+  this.x = Math.random() * canvas.width;
+  this.y = canvas.height + Math.random() * 100;
+  this.size = 10 + Math.random() * 20;
+  this.speed = 0.5 + Math.random() * 1.5;
+  this.alpha = 0.5 + Math.random() * 0.5;
+  this.color = ['#ff2f6d','#ff6a88','#ff99ac','#ffd6e8'][Math.floor(Math.random()*4)];
+}
+
+function drawHeart(h){
+  ctx.save();
+  ctx.translate(h.x,h.y);
+  ctx.scale(h.size/50, h.size/50);
+  ctx.globalAlpha = h.alpha;
+  ctx.fillStyle = h.color;
+  ctx.beginPath();
+  ctx.moveTo(25,15);
+  ctx.bezierCurveTo(25,-5,0,-5,0,15);
+  ctx.bezierCurveTo(0,35,25,55,25,55);
+  ctx.bezierCurveTo(25,55,50,35,50,15);
+  ctx.bezierCurveTo(50,-5,25,-5,25,15);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(hearts.length < 60){hearts.push(new Heart());}
+  for(let i=0;i<hearts.length;i++){
+    hearts[i].y -= hearts[i].speed;
+    drawHeart(hearts[i]);
+    if(hearts[i].y < -50){hearts.splice(i,1);}
+  }
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.onresize = ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+
+// Copy link button
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText('https://Alex31-cyber.github.io/seniseviyorum-ecrinim');
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = 'Kopyalandı ✅';
+  setTimeout(()=>{btn.textContent='Linki Kopyala'},1500);
+});
+
+// Extra hearts on button click
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  for(let i=0;i<15;i++){
+    hearts.push(new Heart());
+  }
+});
+</script>
+
+</body>
+</html>
